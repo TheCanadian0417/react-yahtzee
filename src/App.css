@@ -1,0 +1,240 @@
+.game-board {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.dice-area {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 32px 40px;
+    border-radius: 18px;
+    border: 14px solid transparent;
+    background:
+        /* felt */
+            radial-gradient(circle at center, #9a0a0a 0%, #850000 55%, #5e0000 100%) padding-box,
+                /* fine dark grain lines */
+            repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0 1px, transparent 1px 5px) border-box,
+                /* wider, faint light streaks on a different spacing */
+            repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.07) 0 2px, transparent 2px 11px) border-box,
+                /* base wood color, lit from the top */
+            linear-gradient(180deg, #a07415 0%, #855e00 45%, #6b4a00 100%) border-box;
+    box-shadow:
+            inset 0 0 30px rgba(0, 0, 0, 0.55),
+            0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.game-over {
+    max-width: 360px;
+    margin: 24px auto;
+    padding: 20px 24px 24px;
+    background: #eae3b5;
+    color: #1a1a1a;
+    border: 3px solid #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    animation: pop-in 0.35s ease-out;
+}
+
+.game-over h2 {
+    margin: 0 0 4px;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 28px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.game-over p {
+    margin: 0 0 16px;
+    font-family: 'Archivo Narrow', sans-serif;
+    font-size: 18px;
+}
+
+@keyframes pop-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* ---------- Shared button look ---------- */
+.roll-btn,
+.score-btn,
+.new-game-btn {
+    margin: 16px 6px 0;
+    padding: 10px 22px;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s, filter 0.15s;
+}
+
+.roll-btn:active,
+.score-btn:active,
+.new-game-btn:active {
+    transform: translateY(2px);
+}
+
+/* Roll and New Game: wood, matching the tray rim */
+.roll-btn,
+.new-game-btn {
+    color: #f7f2d6;
+    border: 2px solid #3d2a00;
+    background:
+            repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0 1px, transparent 1px 5px),
+            linear-gradient(180deg, #a07415 0%, #855e00 50%, #6b4a00 100%);
+    box-shadow: 0 4px 0 #3d2a00;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.roll-btn:hover,
+.new-game-btn:hover {
+    filter: brightness(1.1);
+}
+
+.roll-btn:active,
+.new-game-btn:active {
+    box-shadow: 0 2px 0 #3d2a00;
+}
+
+/* Show Scores: paper, matching the scorecard */
+.score-btn {
+    color: #1a1a1a;
+    background: #eae3b5;
+    border: 2px solid #1a1a1a;
+    box-shadow: 0 4px 0 #1a1a1a;
+}
+
+.score-btn:hover {
+    background: #f7f2d6;
+}
+
+.score-btn:active {
+    box-shadow: 0 2px 0 #1a1a1a;
+}
+
+.dice-face {
+    width: 80px;
+    height: 80px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+
+    /* 3x3 Grid Layout */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+
+.pip {
+    display: block;
+    width: 14px;
+    height: 14px;
+    background-color: #000000;
+    border-radius: 50%;
+    align-self: center;
+    justify-self: center;
+}
+
+/* Explicit Grid Alignment Classes */
+.top-left     { grid-column: 1; grid-row: 1; }
+.top-right    { grid-column: 3; grid-row: 1; }
+.mid-left     { grid-column: 1; grid-row: 2; }
+.center       { grid-column: 2; grid-row: 2; }
+.mid-right    { grid-column: 3; grid-row: 2; }
+.bottom-left  { grid-column: 1; grid-row: 3; }
+.bottom-right { grid-column: 3; grid-row: 3; }
+
+.score-card {
+    background-color: #e1e1e1;
+    border: 3px solid #1a1a1a;
+    border-radius: 12px;
+    padding: 12px;
+    max-width: 480px;
+    margin: 20px auto;
+    font-family: 'Archivo Narrow', 'Arial Narrow', sans-serif;
+}
+
+.score-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #1a1a1a;
+    background: #e1e1e1;
+}
+
+.score-table th,
+.score-table td {
+    border: 1px solid #1a1a1a;
+    padding: 6px 10px;
+}
+
+/* black header bar */
+.score-table thead th {
+    background: #1a1a1a;
+    color: #e1e1e1;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* "UPPER SECTION" / "LOWER SECTION" labels */
+.section-row th {
+    text-align: left;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    padding-top: 12px;
+    background: #e1e1e1;
+}
+
+/* heavier rule between the two sections */
+.score-table tbody + tbody {
+    border-top: 3px solid #1a1a1a;
+}
+
+.score-table th[scope="row"] {
+    text-align: left;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.hint {
+    font-size: 12px;
+    line-height: 1.15;
+    text-align: center;
+    color: #333;
+}
+
+/* banked scores look "inked in" */
+.score-cell {
+    width: 70px;
+    text-align: center;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 18px;
+}
+
+/* previews look "penciled in" until you commit */
+.score-cell button {
+    width: 100%;
+    padding: 2px 0;
+    background: transparent;
+    border: 1px dashed rgba(0, 0, 0, 0.35);
+    border-radius: 4px;
+    color: rgba(0, 0, 0, 0.45);
+    font: inherit;
+    cursor: pointer;
+}
+
+.score-cell button:hover {
+    background: #1a1a1a;
+    border-style: solid;
+    color: #eae3b5;
+}
