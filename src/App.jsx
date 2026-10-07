@@ -10,12 +10,24 @@ import { scoreCategory, calculateTotals, BONUS_THRESHOLD, CATEGORIES, isGameOver
 export default function App() {
 
     const [dice, setDice] = useState( () => rollAllDice())
+    const [isRolling, setIsRolling] = useState(false)
     const [rollsLeft, setRollsLeft] = useState(2)
     const [showScores, setShowScores] = useState(false);
     const [scores, setScores] = useState({})
     const rollDice = () => {
-        setDice(oldDice => rerollFree(oldDice))
+        if (isRolling || rollsLeft === 0 || gameOver) return
+        setIsRolling(true)
         setRollsLeft(prev => prev - 1)
+
+        let ticks = 0
+        const id = setInterval(() => {
+            setDice(oldDice => rerollFree(oldDice))   // flicker: new random faces each tick
+            ticks++
+            if (ticks === 8) {                        // 8 ticks × 70ms ≈ half a second
+                clearInterval(id)
+                setIsRolling(false)                   // the last reroll is the real result
+            }
+        }, 70)
     }
 
     const values = dice.map(d => d.value)
@@ -23,13 +35,12 @@ export default function App() {
     const gameOver =  isGameOver(scores)
 
     const hold = id => {
-        if (gameOver) return
+        if (gameOver || isRolling) return
         setDice(oldDice => toggleHold(oldDice, id))
     }
 
     function bankScore(key) {
-        if (key in scores) return;
-        if (gameOver) return;
+        if (key in scores || gameOver || isRolling) return;
         setScores(old => ({ ...old, [key]: scoreCategory(values, key) }))
         setDice(rollAllDice())
         setRollsLeft(2)
@@ -54,12 +65,13 @@ export default function App() {
             <Die key={die.id}
                  value={die.value}
                  isHeld={die.isHeld}
+                 rolling={isRolling && !die.isHeld}
                  hold={() => hold(die.id)}
             />
             ))}
         </div>
 
-        { rollsLeft > 0 && gameOver === false && <button className="roll-btn" onClick={rollDice}>
+        { rollsLeft > 0 && gameOver === false && <button className="roll-btn" onClick={rollDice} disabled={isRolling}>
             {`Roll (${rollsLeft} remaining)`}
         </button>}
 

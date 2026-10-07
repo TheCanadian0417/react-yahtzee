@@ -7,6 +7,25 @@
     padding: 20px;
 }
 
+.dice-face.rolling {
+    animation: tumble 0.56s ease-out;
+}
+
+@keyframes tumble {
+    0%   { transform: translateY(0)    rotate(0); }
+    25%  { transform: translateY(-14%) rotate(-12deg); }
+    50%  { transform: translateY(4%)   rotate(10deg); }
+    75%  { transform: translateY(-6%)  rotate(-5deg); }
+    100% { transform: translateY(0)    rotate(0); }
+}
+
+/* Respect people who've turned on "reduce motion" in their OS */
+@media (prefers-reduced-motion: reduce) {
+    .dice-face.rolling {
+        animation: none;
+    }
+}
+
 /* ---------- Dice tray: everything scales from --die ---------- */
 .dice-area {
     /* The one size everything else is based on:

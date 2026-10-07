@@ -22,7 +22,11 @@ export default function Die(props){
     const activePips = pipPositions[faceIndex] || [];
 
     return (
-        <button className="dice-face" style={styles} onClick={props.hold}>
+        <button
+            className={`dice-face${props.rolling ? " rolling" : ""}`}
+            style={styles}
+            onClick={props.hold}
+        >
             {activePips.map((positionClass, index) => (
                 <span key={index} className={`pip ${positionClass}`}></span>
             ))}
