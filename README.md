@@ -2,7 +2,7 @@
 
 A browser version of the classic dice game, built with React and Vite.
 
-**▶ Play it here: https://thecanadian0417.github.io/yahtzee/**
+**▶ Play it here: https://thecanadian0417.github.io/react-yahtzee/**
 
 ## Features
 
