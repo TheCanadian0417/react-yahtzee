@@ -7,13 +7,21 @@
     padding: 20px;
 }
 
+/* ---------- Dice tray: everything scales from --die ---------- */
 .dice-area {
+    /* The one size everything else is based on:
+       13.5% of the screen width, but never bigger than 80px */
+    --die: min(80px, 13.5vw);
+
     display: flex;
     justify-content: center;
-    gap: 20px;
-    padding: 32px 40px;
-    border-radius: 18px;
-    border: 14px solid transparent;
+    align-items: center;
+    gap: calc(var(--die) * 0.15);
+    padding: calc(var(--die) * 0.3);
+    width: fit-content;
+    margin: 0 auto;
+    border-radius: calc(var(--die) * 0.25);
+    border: clamp(8px, 2.5vw, 14px) solid transparent;
     background:
         /* felt */
             radial-gradient(circle at center, #9a0a0a 0%, #850000 55%, #5e0000 100%) padding-box,
@@ -118,36 +126,41 @@
     box-shadow: 0 2px 0 #1a1a1a;
 }
 
+/* ---------- Dice ---------- */
 .dice-face {
-    width: 80px;                /* desktop size; mobile overrides this */
-    aspect-ratio: 1;
+    flex: none;                 /* never stretch or squash */
+    width: var(--die);
+    height: var(--die);         /* same as width = always square */
     box-sizing: border-box;
-    padding: 12%;               /* % of the die's width, so it scales too */
+    padding: 0;
     border-radius: 16%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
     cursor: pointer;
     touch-action: manipulation;
     transition: transform 0.1s, border-color 0.15s, box-shadow 0.15s;
+
+    /* 5x5 grid: thin margin tracks on the edges, 3 pip tracks in the middle.
+       fr units are a share of the die itself, so the margin scales with it. */
+    display: grid;
+    grid-template-columns: 0.4fr 1fr 1fr 1fr 0.4fr;
+    grid-template-rows: 0.4fr 1fr 1fr 1fr 0.4fr;
 }
 
 .pip {
-    width: 70%;                 /* 70% of its grid cell, not a fixed size */
+    width: 80%;                 /* 80% of its grid cell, not a fixed size */
     aspect-ratio: 1;
     border-radius: 50%;
     background: #1a1a1a;
     place-self: center;
 }
 
-/* Place each pip in its grid cell: row / column */
-.pip.top-left     { grid-area: 1 / 1; }
-.pip.top-right    { grid-area: 1 / 3; }
-.pip.mid-left     { grid-area: 2 / 1; }
-.pip.center       { grid-area: 2 / 2; }
-.pip.mid-right    { grid-area: 2 / 3; }
-.pip.bottom-left  { grid-area: 3 / 1; }
-.pip.bottom-right { grid-area: 3 / 3; }
+/* Place each pip in its grid cell: row / column (the inner 3x3 is rows/cols 2-4) */
+.pip.top-left     { grid-area: 2 / 2; }
+.pip.top-right    { grid-area: 2 / 4; }
+.pip.mid-left     { grid-area: 3 / 2; }
+.pip.center       { grid-area: 3 / 3; }
+.pip.mid-right    { grid-area: 3 / 4; }
+.pip.bottom-left  { grid-area: 4 / 2; }
+.pip.bottom-right { grid-area: 4 / 4; }
 
 .score-card {
     background-color: #e1e1e1;
@@ -237,8 +250,7 @@
 }
 
 /* ---------- Touch behavior (all screen sizes) ---------- */
-button,
-.die {
+button {
     touch-action: manipulation; /* no double-tap zoom when tapping quickly */
 }
 
@@ -256,34 +268,17 @@ button,
         padding: 12px;
     }
 
+    /* #root already pads the edges; extra padding here would squeeze the tray */
+    .game-board {
+        padding: 0;
+    }
+
     h1 {
         font-size: 32px;
         margin: 8px 0 16px;
     }
 
-    /* Dice tray: thinner padding and rim so five dice fit */
-    .dice-area {
-        width: 100%;
-        gap: 6px;
-        padding: 14px 10px;
-        border-width: 8px;
-        border-radius: 14px;
-    }
-
-    .dice-area > * {
-        flex: 1 1 0;
-        min-width: 0;
-        max-width: 64px;
-        width: auto;
-        height: auto;
-        aspect-ratio: 1;
-    }
-
-    /* Dice scale with the screen width */
-    .die {
-        width: clamp(44px, 14vw, 64px);
-        height: clamp(44px, 14vw, 64px);
-    }
+    /* The dice tray needs no phone rules: it scales from --die automatically */
 
     /* Buttons: full-width and easy to hit with a thumb */
     .roll-btn,
@@ -294,8 +289,10 @@ button,
         margin: 12px 0 0;
     }
 
-    /* Scorecard: drop the hint column and tighten everything */
+    /* Scorecard: full width, drop the hint column, tighten everything */
     .score-card {
+        width: 100%;
+        box-sizing: border-box;
         padding: 6px;
         margin: 16px 0;
     }
