@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
@@ -14,21 +14,34 @@ export default function App() {
     const [rollsLeft, setRollsLeft] = useState(2)
     const [showScores, setShowScores] = useState(false);
     const [scores, setScores] = useState({})
-    const rollDice = () => {
-        if (isRolling || rollsLeft === 0 || gameOver) return
-        setIsRolling(true)
-        setRollsLeft(prev => prev - 1)
+    const rollTimer = useRef(null)
 
+    function animateRoll() {
+        clearInterval(rollTimer.current)          // never run two rolls at once
+        setIsRolling(true)
         let ticks = 0
-        const id = setInterval(() => {
-            setDice(oldDice => rerollFree(oldDice))   // flicker: new random faces each tick
+        rollTimer.current = setInterval(() => {
+            setDice(oldDice => rerollFree(oldDice))
             ticks++
-            if (ticks === 8) {                        // 8 ticks × 70ms ≈ half a second
-                clearInterval(id)
-                setIsRolling(false)                   // the last reroll is the real result
+            if (ticks === 8) {
+                clearInterval(rollTimer.current)
+                setIsRolling(false)
             }
         }, 70)
     }
+
+    function rollDice() {
+        if (isRolling || rollsLeft === 0 || gameOver) return
+        setRollsLeft(prev => prev - 1)
+        animateRoll()
+    }
+
+// Roll in once when the page loads
+    useEffect(() => {
+        animateRoll()
+        return () => clearInterval(rollTimer.current)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const values = dice.map(d => d.value)
 
