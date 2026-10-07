@@ -3,6 +3,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    padding: 20px;
 }
 
 .dice-area {
@@ -237,4 +239,84 @@
     background: #1a1a1a;
     border-style: solid;
     color: #eae3b5;
+}
+
+/* ---------- Touch behavior (all screen sizes) ---------- */
+button,
+.die {
+    touch-action: manipulation; /* no double-tap zoom when tapping quickly */
+}
+
+/* Hover lift only on devices that actually hover; on phones it "sticks" after a tap */
+@media (hover: none) {
+    .roll-btn:hover,
+    .new-game-btn:hover {
+        filter: none;
+    }
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 600px) {
+    #root {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 32px;
+        margin: 8px 0 16px;
+    }
+
+    /* Dice tray: thinner padding and rim so five dice fit */
+    .dice-area {
+        gap: 8px;
+        padding: 16px 12px;
+        border-width: 8px;
+        border-radius: 14px;
+    }
+
+    /* Dice scale with the screen width */
+    .die {
+        width: clamp(44px, 14vw, 64px);
+        height: clamp(44px, 14vw, 64px);
+    }
+
+    /* Buttons: full-width and easy to hit with a thumb */
+    .roll-btn,
+    .score-btn,
+    .new-game-btn {
+        width: 100%;
+        min-height: 48px;
+        margin: 12px 0 0;
+    }
+
+    /* Scorecard: drop the hint column and tighten everything */
+    .score-card {
+        padding: 6px;
+        margin: 16px 0;
+    }
+
+    .score-table .hint {
+        display: none;
+    }
+
+    .score-table th,
+    .score-table td {
+        padding: 8px 6px;
+    }
+
+    .score-table th[scope="row"] {
+        font-size: 15px;
+    }
+
+    .score-cell {
+        width: 64px;
+    }
+
+    .score-cell button {
+        min-height: 36px;
+    }
+
+    .game-over {
+        margin: 16px 0;
+    }
 }

@@ -46,10 +46,10 @@ export default function App() {
 
 
   return (
-    <div className="game-board" style={{ textAlign: 'center' , padding: '20px' }}>
+    <div className="game-board" >
         <h1>Yahtzee</h1>
 
-        <div className="dice-area" style={{ display: 'flex', justifyContent: 'center', gap: '10px'}}>
+        <div className="dice-area">
         {dice.map(die => (
             <Die key={die.id}
                  value={die.value}
@@ -59,7 +59,7 @@ export default function App() {
             ))}
         </div>
 
-        { rollsLeft > 0 && gameOver === false && <button className="roll-btn" onClick={rollDice} style={{margin: '20px', padding: '10px 20px'}}>
+        { rollsLeft > 0 && gameOver === false && <button className="roll-btn" onClick={rollDice}>
             {`Roll (${rollsLeft} remaining)`}
         </button>}
 
@@ -77,7 +77,7 @@ export default function App() {
                 <thead>
                 <tr>
                     <th>Category</th>
-                    <th>How to score</th>
+                    <th className="hint">How to score</th>
                     <th>Score</th>
                 </tr>
                 </thead>
