@@ -57,6 +57,7 @@ export default function App() {
         setScores(old => ({ ...old, [key]: scoreCategory(values, key) }))
         setDice(rollAllDice())
         setRollsLeft(2)
+        animateRoll()
     }
 
     function newGame() {
